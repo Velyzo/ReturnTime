@@ -2,10 +2,12 @@ function showNotification(message) {
     const notification = document.getElementById('notification');
     notification.innerText = message;
     notification.classList.add('show');
-
     setTimeout(() => {
-        notification.classList.remove('show');
+        notification.classList.add('hide');
     }, 3000);
+    setTimeout(() => {
+        notification.classList.remove('show', 'hide');
+    }, 3500);
 }
 
 document.getElementById('archive-form').addEventListener('submit', function(event) {

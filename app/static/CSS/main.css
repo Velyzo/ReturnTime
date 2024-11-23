@@ -6,12 +6,75 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: #f3f4f6;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     flex-direction: column;
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.5), rgba(250, 208, 196, 0.5), rgba(161, 196, 253, 0.5), rgba(106, 17, 203, 0.5), rgba(248, 181, 0, 0.5));
+    background-size: 400% 400%;
+    animation: gradientMove 15s ease-in-out infinite;
+}
+
+@keyframes gradientMove {
+    0% {
+        background: linear-gradient(135deg, rgba(255, 154, 158, 0.5), rgba(250, 208, 196, 0.5), rgba(161, 196, 253, 0.5), rgba(106, 17, 203, 0.5), rgba(248, 181, 0, 0.5));
+    }
+    25% {
+        background: linear-gradient(135deg, rgba(161, 196, 253, 0.5), rgba(106, 17, 203, 0.5), rgba(248, 181, 0, 0.5), rgba(255, 154, 158, 0.5), rgba(37, 117, 252, 0.5));
+    }
+    50% {
+        background: linear-gradient(135deg, rgba(248, 181, 0, 0.5), rgba(37, 117, 252, 0.5), rgba(106, 17, 203, 0.5), rgba(161, 196, 253, 0.5), rgba(255, 154, 158, 0.5));
+    }
+    75% {
+        background: linear-gradient(135deg, rgba(37, 117, 252, 0.5), rgba(248, 181, 0, 0.5), rgba(161, 196, 253, 0.5), rgba(106, 17, 203, 0.5), rgba(255, 154, 158, 0.5));
+    }
+    100% {
+        background: linear-gradient(135deg, rgba(255, 154, 158, 0.5), rgba(250, 208, 196, 0.5), rgba(161, 196, 253, 0.5), rgba(106, 17, 203, 0.5), rgba(248, 181, 0, 0.5));
+    }
+}
+
+.nav {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    height: 58px;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav .logo {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.nav .logo:hover {
+    color: #007bff;
+    cursor: pointer;
+}
+
+.nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 12px;
+    padding: 10px 0;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.nav a:hover {
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
 }
 
 .container {
@@ -101,24 +164,66 @@ button.submit-btn:hover {
 .notification {
     display: none;
     position: fixed;
-    top: 20px;
+    top: -80px;
     left: 50%;
     transform: translateX(-50%);
     background-color: #28a745;
     color: white;
     padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     font-size: 16px;
-    transition: opacity 0.5s ease-out;
+    opacity: 0;
+    transition: top 0.5s ease, opacity 0.5s ease;
+    z-index: 10000;
 }
 
 .notification.show {
     display: block;
+    top: 20px;
     opacity: 1;
 }
 
-@media (max-width: 600px) {
+.notification.hide {
+    opacity: 0;
+    top: -80px;
+    transition: top 0.5s ease, opacity 0.5s ease 0.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        top: -80px;
+    }
+    100% {
+        opacity: 1;
+        top: 20px;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        top: 20px;
+    }
+    100% {
+        opacity: 0;
+        top: -80px;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav ul li {
+        margin-left: 0;
+        margin-bottom: 15px;
+    }
+
     .container {
         padding: 30px;
     }

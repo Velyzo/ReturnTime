@@ -8,7 +8,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dyn_history.css') }}">
 </head>
 <body>
-
+    <div class="nav">
+        <div class="logo">
+            ReturnTime
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/top-domains">Top Domains</a>
+            <a href="/about">About</a>
+            <a href="/report">Report</a>
+        </div>
+    </div>
     <h1>Archived Pages for URL: {{ domain_or_url }}</h1>
 
     <div class="search-container">

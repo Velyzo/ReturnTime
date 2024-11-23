@@ -19,6 +19,18 @@ routes = Blueprint('routes', __name__)
 def index():
     return render_template('main/index.html')
 
+@app.route('/about')
+def about():
+    return render_template('about/index.html')
+
+@app.route('/report')
+def report():
+    return render_template('report/index.html')
+
+@app.route('/top-domains')
+def top_domains():
+    return render_template('top_domains/index.html')
+
 @app.route('/archive', methods=['POST'])
 def archive():
     url = request.form['url']

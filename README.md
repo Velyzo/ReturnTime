@@ -39,7 +39,7 @@ pip install -r requirements.txt
    python app.py
    ```
 
-4. Open your browser and navigate to:  
+4. Open your browser and .navigate to:  
    ```
    http://localhost:8000
    ```
