@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReturnTime - Archived {{ domain_or_url }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='IMG/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dyn_history.css') }}">
+</head>
+<body>
+
+    <h1>Archived Pages for URL: {{ domain_or_url }}</h1>
+
+    <div class="search-container">
+        <input type="text" id="searchBar" placeholder="Search by Date (e.g., 2024-11-22)" oninput="searchByDate()">
+    </div>
+
+    {% if entries %}
+        <div class="card-container" id="cardContainer">
+            {% for entry in entries %}
+                <div class="card" data-timestamp="{{ entry[1] }}">
+                    <div class="card-title">{{ entry[1] }}</div>
+                    <div class="card-content">
+                        URL: <a href="{{ entry[0] }}" class="url">{{ entry[0] }}</a><br>
+                    </div>
+                    <a href="/version?uuid={{ entry[2] }}&url={{ domain_or_url }}" class="btn-view">View Version</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-results">No archived pages found for this URL.</p>
+    {% endif %}
+    <script src="{{ url_for('static', filename='JS/search.js') }}"></script>
+</body>
+</html>
