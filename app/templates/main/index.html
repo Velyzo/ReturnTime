@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReturnTime - View Archived Websites</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='IMG/logo.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">    
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">   
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/discord_popup.css') }}">     
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="nav">
@@ -43,8 +45,20 @@
             <p>© 2024 ReturnTime. All rights reserved.</p>
         </div>
     </div>
-
+    <div id="popupButton">
+        <i class="fa-brands fa-discord"></i>
+      </div>
+      
+      <div id="discordPopup">
+        <button id="closePopup">&times;</button>
+        <widgetbot
+          server="1303411768193974293"
+          channel="1303411768722198530">
+        </widgetbot>
+    </div>
     <div id="notification" class="notification"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
+    <script src="{{ url_for('static', filename='JS/discord_popup.js') }}"></script>
     <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
 </body>
 </html>
