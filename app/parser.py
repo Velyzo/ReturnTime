@@ -80,7 +80,11 @@ def process_resource(tag, base_url, resource_folder, domain, page_uuid, timestam
         res = requests.get(full_resource_url, timeout=10)
         if res.status_code == 200:
             resource_filename = generate_unique_filename(full_resource_url)
-            resource_path = os.path.join(resource_folder, resource_filename)
+            resource_path = os.path.normpath(os.path.join(resource_folder, resource_filename))
+
+            if not resource_path.startswith(resource_folder):
+                logger.error(f"Invalid resource path: {resource_path}")
+                return
 
             with open(resource_path, 'wb') as file:
                 file.write(res.content)
