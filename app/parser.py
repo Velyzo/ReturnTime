@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../web_archives'))
 
+AUTHORIZED_DOMAINS = ["example.com", "anotherdomain.com"]
+
 def fetch_and_store_page(domain, url, base_url, visited_urls):
     if url in visited_urls:
         logger.debug(f"Skipping already visited URL: {url}")
@@ -20,6 +22,11 @@ def fetch_and_store_page(domain, url, base_url, visited_urls):
 
     visited_urls.add(url)
     
+    parsed_url = urlparse(url)
+    if parsed_url.netloc not in AUTHORIZED_DOMAINS:
+        logger.error(f"Unauthorized domain: {parsed_url.netloc}")
+        return
+
     try:
         response = requests.get(url, timeout=10)
         if response.status_code != 200:
