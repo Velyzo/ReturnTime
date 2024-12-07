@@ -90,7 +90,10 @@ def view_version():
         return jsonify({"error": "URL is required"}), 400
 
     sanitized = sanitize_domain_or_url(domain_or_url)
-    domain_db_path = os.path.join(BASE_DIR, f'{sanitized}.db')
+    domain_db_path = os.path.normpath(os.path.join(BASE_DIR, f'{sanitized}.db'))
+    if not domain_db_path.startswith(BASE_DIR):
+        logging.error(f"Attempted access to a path outside the base directory: {domain_db_path}")
+        return jsonify({"error": "Invalid path"}), 400
 
     if not os.path.exists(domain_db_path):
         logging.error(f"No database found for URL: {domain_or_url}")
