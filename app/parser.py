@@ -8,6 +8,8 @@ from urllib.parse import urljoin, urlparse
 from .database import save_webpage, save_resource
 from .utils import sanitize_domain_or_url as sanitize_domain
 
+ALLOWED_DOMAINS = ["example.com", "another-allowed-domain.com"]
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
@@ -21,6 +23,10 @@ def fetch_and_store_page(domain, url, base_url, visited_urls):
     visited_urls.add(url)
     
     try:
+        if not is_url_allowed(url):
+            logger.error(f"URL not allowed: {url}")
+            return
+
         response = requests.get(url, timeout=10)
         if response.status_code != 200:
             logger.error(f"Failed to fetch page: {url} - Status {response.status_code}")
@@ -60,6 +66,10 @@ def process_resource(tag, base_url, resource_folder, domain, page_uuid, timestam
     full_resource_url = urljoin(base_url, resource_url)
     
     try:
+        if not is_url_allowed(full_resource_url):
+            logger.error(f"Resource URL not allowed: {full_resource_url}")
+            return
+
         res = requests.get(full_resource_url, timeout=10)
         if res.status_code == 200:
             resource_filename = generate_unique_filename(full_resource_url)
@@ -80,6 +90,11 @@ def process_resource(tag, base_url, resource_folder, domain, page_uuid, timestam
 
     except requests.RequestException as e:
         logger.error(f"Failed to fetch resource: {full_resource_url} - {str(e)}")
+
+def is_url_allowed(url):
+    """Check if the URL is within the allowed domains."""
+    parsed_url = urlparse(url)
+    return any(parsed_url.netloc.endswith(domain) for domain in ALLOWED_DOMAINS)
 
 def generate_unique_filename(resource_url):
     """Generate a unique filename for the resource to avoid overwriting."""
