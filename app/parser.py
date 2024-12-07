@@ -43,7 +43,9 @@ def fetch_and_store_page(domain, url, base_url, visited_urls):
         timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        resource_folder = os.path.join(BASE_DIR, sanitize_domain(domain), page_uuid)
+        resource_folder = os.path.normpath(os.path.join(BASE_DIR, sanitize_domain(domain), page_uuid))
+        if not resource_folder.startswith(BASE_DIR):
+            raise Exception("Invalid resource folder path")
         os.makedirs(resource_folder, exist_ok=True)
 
         for tag in soup.find_all(['link', 'script', 'img']):
