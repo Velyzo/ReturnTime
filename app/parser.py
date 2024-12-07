@@ -8,14 +8,10 @@ from urllib.parse import urljoin, urlparse
 from .database import save_webpage, save_resource
 from .utils import sanitize_domain_or_url as sanitize_domain
 
-ALLOWED_DOMAINS = ["example.com", "another-allowed-domain.com"]
-
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../web_archives'))
-
-AUTHORIZED_DOMAINS = ["example.com", "anotherdomain.com"]
 
 def fetch_and_store_page(domain, url, base_url, visited_urls):
     if url in visited_urls:
@@ -24,16 +20,7 @@ def fetch_and_store_page(domain, url, base_url, visited_urls):
 
     visited_urls.add(url)
     
-    parsed_url = urlparse(url)
-    if parsed_url.netloc not in AUTHORIZED_DOMAINS:
-        logger.error(f"Unauthorized domain: {parsed_url.netloc}")
-        return
-
     try:
-        if not is_url_allowed(url):
-            logger.error(f"URL not allowed: {url}")
-            return
-
         response = requests.get(url, timeout=10)
         if response.status_code != 200:
             logger.error(f"Failed to fetch page: {url} - Status {response.status_code}")
@@ -43,9 +30,7 @@ def fetch_and_store_page(domain, url, base_url, visited_urls):
         timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        resource_folder = os.path.normpath(os.path.join(BASE_DIR, sanitize_domain(domain), page_uuid))
-        if not resource_folder.startswith(BASE_DIR):
-            raise Exception("Invalid resource folder path")
+        resource_folder = os.path.join(BASE_DIR, sanitize_domain(domain), page_uuid)
         os.makedirs(resource_folder, exist_ok=True)
 
         for tag in soup.find_all(['link', 'script', 'img']):
@@ -75,18 +60,10 @@ def process_resource(tag, base_url, resource_folder, domain, page_uuid, timestam
     full_resource_url = urljoin(base_url, resource_url)
     
     try:
-        if not is_url_allowed(full_resource_url):
-            logger.error(f"Resource URL not allowed: {full_resource_url}")
-            return
-
         res = requests.get(full_resource_url, timeout=10)
         if res.status_code == 200:
             resource_filename = generate_unique_filename(full_resource_url)
-            resource_path = os.path.normpath(os.path.join(resource_folder, resource_filename))
-
-            if not resource_path.startswith(resource_folder):
-                logger.error(f"Invalid resource path: {resource_path}")
-                return
+            resource_path = os.path.join(resource_folder, resource_filename)
 
             with open(resource_path, 'wb') as file:
                 file.write(res.content)
@@ -103,11 +80,6 @@ def process_resource(tag, base_url, resource_folder, domain, page_uuid, timestam
 
     except requests.RequestException as e:
         logger.error(f"Failed to fetch resource: {full_resource_url} - {str(e)}")
-
-def is_url_allowed(url):
-    """Check if the URL is within the allowed domains."""
-    parsed_url = urlparse(url)
-    return any(parsed_url.netloc.endswith(domain) for domain in ALLOWED_DOMAINS)
 
 def generate_unique_filename(resource_url):
     """Generate a unique filename for the resource to avoid overwriting."""
