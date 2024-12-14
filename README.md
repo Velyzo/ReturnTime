@@ -3,6 +3,8 @@
 **Effortlessly Archive Websites Locally**  
 **📂 Fast, Easy, and Intuitive Web UI**  
 
+![image (2)](https://github.com/user-attachments/assets/d5c025e4-f7f2-4362-a73d-c1a4f34fe2ef)
+
 ---
 
 ## 🚀 Features  
