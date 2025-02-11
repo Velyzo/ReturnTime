@@ -3,6 +3,7 @@ import sqlite3
 import logging
 from .utils import sanitize_domain_or_url
 from datetime import datetime
+from collections import defaultdict
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../web_archives'))
 MAIN_DB_PATH = os.path.join(BASE_DIR, 'main_sitemap.db')
@@ -87,9 +88,6 @@ def save_resource(domain_or_url, resource_url, resource_path, timestamp, uuid):
         logger.error(f"Error saving resource {resource_url}: {e}")
 
 def get_archives_by_timestamp(domain_or_url, start_date, end_date):
-    """
-    Retrieve archives from the main database by a given date range.
-    """
     logging.debug(f"Fetching archives from {domain_or_url} between {start_date} and {end_date}")
     try:
         with sqlite3.connect(MAIN_DB_PATH) as conn:
@@ -106,3 +104,24 @@ def get_archives_by_timestamp(domain_or_url, start_date, end_date):
 
 def get_current_timestamp():
     return datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+
+def get_domain_stats():
+    logging.debug("Fetching domain statistics.")
+    try:
+        with sqlite3.connect(MAIN_DB_PATH) as conn:
+            query = '''
+                SELECT domain_or_url, COUNT(*) as archive_count
+                FROM archives
+                GROUP BY domain_or_url
+                ORDER BY archive_count DESC
+            '''
+            cursor = conn.execute(query)
+            domain_count = cursor.fetchall()
+
+            domains = [{"domain": domain, "count": count} for domain, count in domain_count]
+            
+            logging.info(f"Domain statistics fetched successfully.")
+            return domains
+    except sqlite3.Error as e:
+        logger.error(f"Error fetching domain statistics: {e}")
+        return []

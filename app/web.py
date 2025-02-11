@@ -1,6 +1,6 @@
 import os
 from flask import Flask, Blueprint, request, jsonify, render_template, send_from_directory
-from .database import init_main_db, init_domain_db
+from .database import init_main_db, init_domain_db, get_domain_stats
 from .parser import fetch_and_store_page
 from .utils import sanitize_domain_or_url
 import logging
@@ -29,7 +29,9 @@ def report():
 
 @app.route('/top-domains')
 def top_domains():
-    return render_template('top_domains/index.html')
+    domains = get_domain_stats()
+    print(domains)
+    return render_template('top_domains/index.html', domains=domains)
 
 @app.route('/archive', methods=['POST'])
 def archive():

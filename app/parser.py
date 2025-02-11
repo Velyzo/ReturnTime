@@ -24,6 +24,8 @@ HEADERS = {
     'Pragma': 'no-cache',
 }
 
+#Or whatever
+
 MAX_RETRIES = 3
 TIMEOUT = 15
 

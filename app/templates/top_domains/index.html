@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReturnTime - Top Domains</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='IMG/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/top_domains.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="nav">
+        <div class="logo">
+            ReturnTime
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/top-domains">Top Domains</a>
+            <a href="/about">About</a>
+            <a href="/report">Report</a>
+        </div>
+    </div>
+    <div class="container">
+        <header>
+            <h1>Top Domains</h1>
+            <p>Most Archived Domains</p>
+        </header>
+        <div class="top-domains">
+            {% for domain in domains %}
+            <div class="domain">
+                <p>{{ domain.domain }}</p>
+                <p>{{ domain.count }} Archives</p>
+            </div>
+        {% endfor %}        
+        <div class="footer">
+            <p>© 2025 ReturnTime. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
