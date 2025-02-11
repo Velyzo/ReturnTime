@@ -3,7 +3,7 @@
 **Effortlessly Archive Websites Locally**  
 **📂 Fast, Easy, and Intuitive Web UI**  
 
-![ScreenShot Tool -20251214141812](https://github.com/user-attachments/assets/465024b5-1a5a-4c6a-9ee2-71081d7925f6)
+![screencapture-127-0-0-1-5000-2025-02-11-23_19_53](https://github.com/user-attachments/assets/da52124b-cec0-4e16-8d95-7ad2a5b2bd41)
 
 > Screenshot of the current UI (still in development)
 
